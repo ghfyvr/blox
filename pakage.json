@@ -1,25 +1,15 @@
 {
   "name": "blox-land-clone",
   "version": "1.0.0",
-  "description": "A virtual real estate platform similar to Blox.Land",
-  "private": true,
   "scripts": {
-    "dev": "vercel dev",
-    "start": "vercel start",
-    "deploy": "vercel --prod",
-    "lint": "eslint public/script.js",
-    "format": "prettier --write public/**/*.{js,css,html}",
-    "prepare": "husky install"
+    "dev": "php -S localhost:8000 -t public",
+    "start": "vercel dev",
+    "deploy": "vercel --prod"
   },
   "devDependencies": {
-    "eslint": "^8.56.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-security": "^1.7.1",
-    "husky": "^9.0.11",
-    "lint-staged": "^15.2.0",
-    "prettier": "^3.2.5",
     "vercel": "^34.0.0"
-  },
+  }
+}
   "lint-staged": {
     "*.{js,css,html}": [
       "prettier --write",
