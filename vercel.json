@@ -1,0 +1,36 @@
+{
+  "version": 2,
+  "public": true,
+  "name": "blox-land-clone",
+  "builds": [
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "api/*.php",
+      "use": "@vercel/php"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/public/index.html"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
+    }
+  ],
+  "env": {
+    "DB_HOST": "your-database-host",
+    "DB_NAME": "your-database-name",
+    "DB_USER": "your-database-user",
+    "DB_PASS": "your-database-password",
+    "JWT_SECRET": "your-jwt-secret-key"
+  }
+}
