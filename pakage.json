@@ -11,9 +11,6 @@
     "format": "prettier --write public/**/*.{js,css,html}",
     "prepare": "husky install"
   },
-  "dependencies": {
-    "@vercel/php": "^0.6.0"
-  },
   "devDependencies": {
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
