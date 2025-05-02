@@ -2,18 +2,11 @@
   "name": "blox-land-clone",
   "version": "1.0.0",
   "scripts": {
-    "dev": "php -S localhost:8000 -t public",
-    "start": "vercel dev",
+    "dev": "vercel dev",
+    "start": "vercel start",
     "deploy": "vercel --prod"
   },
   "devDependencies": {
     "vercel": "^34.0.0"
-  }
-}
-  "lint-staged": {
-    "*.{js,css,html}": [
-      "prettier --write",
-      "eslint --fix"
-    ]
   }
 }
