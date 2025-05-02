@@ -1,20 +1,12 @@
 <?php
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
-
-require_once __DIR__ . '/../vendor/autoload.php'; // For Composer dependencies
-
-// Handle preflight request
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
+// Load .env manually for local dev
+if (file_exists(__DIR__ . '/../.env')) {
+    $env = parse_ini_file(__DIR__ . '/../.env');
+    $_ENV = array_merge($_ENV, $env);
 }
 
-// Database configuration (in a real app, use environment variables)
-$dbHost = 'localhost';
-$dbName = 'bloxland';
+$dbHost = $_ENV['DB_HOST'] ?? 'localhost';
+$dbName = $_ENV['DB_NAME'] ?? 'bloxland';
 $dbUser = 'root';
 $dbPass = 'password';
 
